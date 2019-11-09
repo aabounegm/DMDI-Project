@@ -33,18 +33,18 @@ export default new Vuex.Store({
       dispatch('getPatients');
     },
     async getDoctors({ commit }) {
-      let response = await fetch(`${API}/doctors`);
-      let json = await response.json();
+      const response = await fetch(`${API}/doctors`);
+      const json = await response.json();
       commit('setDoctors', json);
     },
     async getNurses({ commit }) {
-      let response = await fetch(`${API}/nurses`);
-      let json = await response.json();
+      const response = await fetch(`${API}/nurses`);
+      const json = await response.json();
       commit('setNurses', json);
     },
     async getPatients({ commit }) {
-      let response = await fetch(`${API}/patients`);
-      let json = await response.json();
+      const response = await fetch(`${API}/patients`);
+      const json = await response.json();
       commit('setPatients', json);
     },
   },
