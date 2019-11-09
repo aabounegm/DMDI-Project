@@ -1,10 +1,14 @@
 <template>
   <v-app>
     <v-app-bar app>
-      <v-toolbar-title class="headline text-uppercase">
-        <span>Vuetify</span>
-        <span class="font-weight-light">MATERIAL DESIGN</span>
+      <v-toolbar-title style="margin-right: 20px;" class="headline text-uppercase">
+        <span>Hospital</span>
       </v-toolbar-title>
+
+      <v-btn text to="/doctors">
+        Doctors
+      </v-btn>
+
       <v-spacer></v-spacer>
       <v-btn
         text
