@@ -20,10 +20,10 @@ export default new Vuex.Store({
       state.doctors = payload;
     },
     setNurses(state, payload) {
-
+      state.nurses = payload;
     },
     setPatients(state, payload) {
-
+      state.patients = payload;
     },
   },
   actions: {
@@ -38,12 +38,14 @@ export default new Vuex.Store({
       commit('setDoctors', json);
     },
     async getNurses({ commit }) {
-
+      let response = await fetch(`${API}/nurses`);
+      let json = await response.json();
+      commit('setNurses', json);
     },
     async getPatients({ commit }) {
-
+      let response = await fetch(`${API}/patients`);
+      let json = await response.json();
+      commit('setPatients', json);
     },
-  },
-  modules: {
   },
 });

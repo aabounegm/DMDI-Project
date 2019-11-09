@@ -14,3 +14,21 @@ def api_home():
     results = cur.fetchall()
     cur.close()
     return jsonify(results)
+
+
+@api.route('/patients')
+def api_home():
+    cur = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+    cur.execute('SELECT * FROM patients')
+    results = cur.fetchall()
+    cur.close()
+    return jsonify(results)
+
+
+@api.route('/nurses')
+def api_home():
+    cur = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+    cur.execute('SELECT * FROM nurses')
+    results = cur.fetchall()
+    cur.close()
+    return jsonify(results)
