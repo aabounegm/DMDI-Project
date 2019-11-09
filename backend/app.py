@@ -1,7 +1,9 @@
 from flask import Flask, Blueprint, url_for
+from flask_cors import CORS
 from views import api
 
 app = Flask(__name__)
+CORS(app)
 app.register_blueprint(api, url_prefix='/api')
 
 
