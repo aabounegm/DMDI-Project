@@ -1,5 +1,6 @@
 from flask import Blueprint, jsonify
 import psycopg2
+import psycopg2.extras
 
 api = Blueprint('api', __name__, url_prefix='/api')
 conn = psycopg2.connect(host='localhost', user='postgres',
@@ -8,11 +9,8 @@ conn = psycopg2.connect(host='localhost', user='postgres',
 
 @api.route('/doctors')
 def api_home():
-    cur = conn.cursor()
-    cur.execute('SELECT name FROM doctors')
-    results = []
-    colnames = [desc[0] for desc in cur.description]
-    for row in cur.fetchall():
-        results.append(dict(zip(colnames, row)))
+    cur = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+    cur.execute('SELECT * FROM doctors')
+    results = cur.fetchall()
     cur.close()
     return jsonify(results)
