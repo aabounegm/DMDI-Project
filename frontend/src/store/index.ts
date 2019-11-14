@@ -3,7 +3,7 @@ import Vuex from 'vuex';
 
 Vue.use(Vuex);
 
-const API = 'http://localhost:5000/api';
+const API = process.env.NODE_ENV === 'development' ? 'http://localhost:5000/api' : '/api';
 
 export default new Vuex.Store({
   state: {
