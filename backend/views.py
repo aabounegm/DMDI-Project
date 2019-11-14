@@ -1,4 +1,4 @@
-from flask import Blueprint, jsonify
+from flask import Blueprint, jsonify, request
 import psycopg2
 import psycopg2.extras
 
@@ -20,6 +20,23 @@ def api_home():
 def api_home():
     cur = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
     cur.execute('SELECT * FROM patients')
+    results = cur.fetchall()
+    cur.close()
+    return jsonify(results)
+
+
+@api.route('/reports', endpoint='reports')
+def api_home():
+    patient_id = request.args.get('patient_id', type=int)
+    cur = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+    cur.execute('''
+        SELECT
+            CONCAT(patient.first_name, ' ', patient.last_name) as patient_name,
+            CONCAT(doctor.first_name, ' ', doctor.last_name) as doctor_name,
+            report.diagnosis, report.additional_notes, report.needs_follow_up, report.date
+        FROM Reports report, Patients patient, Doctors doctor
+        WHERE report.patient_id = %s AND report.patient_id=patient.id AND doctor.id=report.doctor_id; ''',
+                (patient_id,))
     results = cur.fetchall()
     cur.close()
     return jsonify(results)
