@@ -14,6 +14,9 @@
               inset
               vertical
             ></v-divider>
+            <v-btn @click="query1">
+              (1) First/Last = M/L
+            </v-btn>
             <v-spacer></v-spacer>
             <v-text-field
               v-model="search"
@@ -31,6 +34,7 @@
 
 <script lang="ts">
 import Vue from 'vue';
+import { mapActions } from 'vuex';
 export default Vue.extend({
   data() {
     return {
@@ -48,5 +52,6 @@ export default Vue.extend({
   created() {
     this.$store.dispatch('getDoctors');
   },
+  methods: mapActions(['query1']),
 });
 </script>

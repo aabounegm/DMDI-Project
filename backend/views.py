@@ -16,6 +16,20 @@ def api_home():
     return jsonify(results)
 
 
+@api.route('/doctors/query1', endpoint='query1')
+def api_home():
+    cur = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+    cur.execute('''SELECT * from Doctors
+        WHERE (first_name LIKE 'M%%' AND last_name NOT LIKE 'M%%')
+           OR (first_name LIKE 'L%%' AND last_name NOT LIKE 'L%%')
+           OR (first_name NOT LIKE 'M%%' AND last_name LIKE 'M%%')
+           OR (first_name NOT LIKE 'L%%' AND last_name LIKE 'L%%')'''
+                )
+    results = cur.fetchall()
+    cur.close()
+    return jsonify(results)
+
+
 @api.route('/patients', endpoint='patients')
 def api_home():
     cur = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
