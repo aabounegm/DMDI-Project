@@ -60,13 +60,20 @@ export default new Vuex.Store({
     async getReports({ commit, state }) {
       const response = await fetch(`${API}/reports?patient_id=${state.currentUser.id}`);
       const json = await response.json();
+      json.forEach((element: any) => {
+        if (element.needs_follow_up) {
+          element.needs_follow_up = 'Yes';
+        } else {
+          element.needs_follow_up = 'No';
+        }
+      });
       commit('setReports', json);
     },
     async query1({ commit }) {
       const response = await fetch(`${API}/doctors/query1`);
       const json = await response.json();
       commit('setDoctors', json);
-    }
+    },
   },
   getters: {
     canSeeReports: (state) => state.currentUser != null && ['doctor', 'patient'].includes(state.userType),
