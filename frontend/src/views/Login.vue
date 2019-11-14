@@ -7,10 +7,10 @@
           {{ type }}
           <v-select style="margin-left: 50px;" :items="value" v-model="currentUser">
             <template v-slot:item="{ item }">
-              {{ item.name || (item.first_name + ' ' + item.last_name) }}
+              {{ item | name }}
             </template>
             <template v-slot:selection="{ item }">
-              {{ item.name || (item.first_name + ' ' + item.last_name) }}
+              {{ item | name }}
             </template>
           </v-select>
         </template>
@@ -26,13 +26,16 @@ import { mapState } from 'vuex';
 export default Vue.extend({
   data() {
     return {
-      currentUser: '',
     };
   },
   computed: {
     userType: {
       get() { return this.$store.state.userType; },
       set(val) { this.$store.commit('setUserType', val); },
+    },
+    currentUser: {
+      get() { return this.$store.state.currentUser; },
+      set(val) { this.$store.commit('setCurrentUser', val); },
     },
     ...mapState({
       users(state: any) {
@@ -47,11 +50,12 @@ export default Vue.extend({
   mounted() {
     this.$store.dispatch('getAllUsers');
   },
-  watch: {
-    userType(val) {
-      if (val === 'guest') {
-        this.currentUser = '';
+  filters: {
+    name(item: any) {
+      if (typeof item.name === 'string') {
+        return item.name;
       }
+      return `${item.first_name} ${item.last_name}`;
     },
   },
 });
