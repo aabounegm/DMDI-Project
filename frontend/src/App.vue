@@ -8,6 +8,10 @@
       <v-btn text to="/doctors">
         Doctors
       </v-btn>
+      
+      <v-btn v-if="$store.getters.canSeeReports" text to="/reports">
+        My Reports
+      </v-btn>
 
       <v-spacer></v-spacer>
       <v-btn

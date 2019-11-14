@@ -7,14 +7,21 @@ const API = 'http://localhost:5000/api';
 
 export default new Vuex.Store({
   state: {
+    currentUser: null as any,
     userType: '',
     doctors: [],
     nurses: [],
     patients: [],
+    reports: [],
   },
   mutations: {
     setUserType(state, payload) {
       state.userType = payload;
+      state.currentUser = null;
+      state.reports = [];
+    },
+    setCurrentUser(state, payload) {
+      state.currentUser = payload;
     },
     setDoctors(state, payload) {
       state.doctors = payload;
@@ -24,6 +31,9 @@ export default new Vuex.Store({
     },
     setPatients(state, payload) {
       state.patients = payload;
+    },
+    setReports(state, payload) {
+      state.reports = payload;
     },
   },
   actions: {
@@ -47,5 +57,13 @@ export default new Vuex.Store({
       const json = await response.json();
       commit('setPatients', json);
     },
+    async getReports({ commit, state }) {
+      const response = await fetch(`${API}/reports?patient_id=${state.currentUser.id}`);
+      const json = await response.json();
+      commit('setReports', json);
+    },
+  },
+  getters: {
+    canSeeReports: (state) => state.currentUser != null && ['doctor', 'patient'].includes(state.userType),
   },
 });
