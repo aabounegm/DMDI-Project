@@ -1,10 +1,10 @@
 from flask import Blueprint, jsonify, request
 import psycopg2
 import psycopg2.extras
+import os
 
 api = Blueprint('api', __name__, url_prefix='/api')
-conn = psycopg2.connect(host='localhost', user='postgres',
-                        password='password', database='hospital')
+conn = psycopg2.connect(os.getenv('DATABASE_URL'))
 
 
 @api.route('/doctors', endpoint='doctors')
