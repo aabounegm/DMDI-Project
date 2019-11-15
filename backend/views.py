@@ -33,7 +33,9 @@ def api_home():
 @api.route('/patients', endpoint='patients')
 def api_home():
     cur = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
-    cur.execute('SELECT * FROM patients')
+    cur.execute('''SELECT patient.*, syndicate.name as syndicate_name 
+        FROM patients patient
+        FULL OUTER JOIN syndicates syndicate ON patient.syndicate_id=syndicate.id''')
     results = cur.fetchall()
     cur.close()
     return jsonify(results)
