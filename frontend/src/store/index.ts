@@ -58,7 +58,7 @@ export default new Vuex.Store({
       commit('setPatients', json);
     },
     async getReports({ commit, state }) {
-      const response = await fetch(`${API}/reports?patient_id=${state.currentUser.id}`);
+      const response = await fetch(`${API}/reports?${state.userType}_id=${state.currentUser.id}`);
       const json = await response.json();
       json.forEach((element: any) => {
         if (element.needs_follow_up) {
