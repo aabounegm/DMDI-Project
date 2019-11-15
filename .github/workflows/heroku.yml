@@ -31,7 +31,6 @@ jobs:
         HEROKU_API_TOKEN: ${{ secrets.HEROKU_API_TOKEN }}
         HEROKU_APP_NAME: dmd-phase3
       run: |
-        git init
-        git add .
-        git commit -m "Deploy to Heroku"
-        git push -U https://heroku:$HEROKU_API_TOKEN@git.heroku.com/$HEROKU_APP_NAME.git
+        cd backend
+        heroku plugins:install heroku-builds
+        heroku builds:create -a ${HEROKU_APP_NAME}
