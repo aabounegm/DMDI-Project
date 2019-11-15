@@ -11,10 +11,12 @@ app.register_blueprint(api, url_prefix='/api')
 @app.route('/', defaults={'path': 'index.html'})
 @app.route('/<path:path>')
 def home(path):
-    if not (path.startswith('/js/') or path.startswith('/css/') or path == '/favicon.ico'):
+    if not (path.startswith('js/') or path.startswith('css/') or path == 'favicon.ico'):
         path = 'index.html'
-    return send_from_directory('../frontend/dist', path)
+    print(path)
+    return send_from_directory('./dist', path)
 
 
 if __name__ == '__main__':
-    app.run('0.0.0.0', os.getenv('PORT', 5000), debug=True)
+    app.run('0.0.0.0', os.getenv('PORT', 5000),
+            debug=os.getenv('FLASK_DEBUG') == 1)
