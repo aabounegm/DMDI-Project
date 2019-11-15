@@ -31,6 +31,7 @@ jobs:
         HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
         HEROKU_APP_NAME: dmd-phase3
       run: |
+        cp Procfile backend/
         cd backend
         heroku plugins:install heroku-builds
         heroku builds:create -a ${HEROKU_APP_NAME}
