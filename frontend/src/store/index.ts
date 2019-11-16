@@ -55,6 +55,15 @@ export default new Vuex.Store({
     async getPatients({ commit }) {
       const response = await fetch(`${API}/patients`);
       const json = await response.json();
+      json.forEach((element: any) => {
+        const name = element.emergency_contact_name || '';
+        const phone = element.emergency_contact_phone_number || '';
+        const relation = element.emergency_contact_relation || '';
+        element.emergency_contact = `${name} (${phone}) [${relation}]`;
+        if (element.emergency_contact === ' () []') {
+          element.emergency_contact = '';
+        }
+      });
       commit('setPatients', json);
     },
     async getReports({ commit, state }) {
@@ -73,6 +82,11 @@ export default new Vuex.Store({
       const response = await fetch(`${API}/doctors/query1`);
       const json = await response.json();
       commit('setDoctors', json);
+    },
+    async query3({ commit }) {
+      const response = await fetch(`${API}/doctors/query3`);
+      const json = await response.json();
+      commit('setPatients', json);
     },
   },
   getters: {

@@ -3,6 +3,7 @@ import VueRouter from 'vue-router';
 import Home from '../views/Home.vue';
 import Login from '../views/Login.vue';
 import Doctors from '../views/Doctors.vue';
+import Patients from '../views/Patients.vue';
 import Reports from '../views/Reports.vue';
 import store from '../store/index';
 
@@ -26,6 +27,11 @@ const router = new VueRouter({
       path: '/doctors',
       name: 'doctors',
       component: Doctors,
+    },
+    {
+      path: '/patients',
+      name: 'patients',
+      component: Patients,
     },
     {
       path: '/reports',

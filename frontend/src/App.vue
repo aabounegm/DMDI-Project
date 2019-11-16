@@ -9,6 +9,10 @@
         Doctors
       </v-btn>
       
+      <v-btn text to="/patients">
+        Patients
+      </v-btn>
+      
       <v-btn v-if="$store.getters.canSeeReports" text to="/reports">
         My Reports
       </v-btn>
