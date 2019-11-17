@@ -12,8 +12,6 @@ jobs:
 
     steps:
     - uses: actions/checkout@v1
-    - name: Show content
-      run: ls -al
     - uses: actions/setup-node@v1.1.0
     - name: Build
       run: |
@@ -31,7 +29,6 @@ jobs:
         HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
         HEROKU_APP_NAME: dmd-phase3
       run: |
-        cp Procfile backend/
         cd backend
         heroku plugins:install heroku-builds
         heroku builds:create -a ${HEROKU_APP_NAME}
