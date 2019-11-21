@@ -7,7 +7,7 @@ api = Blueprint('api', __name__, url_prefix='/api')
 conn = psycopg2.connect(os.getenv('DATABASE_URL'))
 
 
-@api.route('/doctors', endpoint='doctors')
+@api.route('/doctors/', endpoint='doctors')
 def api_home():
     cur = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
     cur.execute('SELECT * FROM doctors')
@@ -30,19 +30,74 @@ def api_home():
     return jsonify(results)
 
 
-@api.route('/patients', endpoint='patients')
+@api.route('/patients/', endpoint='patients')
 def api_home():
     cur = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
-    cur.execute('''SELECT patient.*, syndicate.name as syndicate_name 
+    cur.execute('''SELECT patient.*, syndicate.name as syndicate_name
         FROM patients patient
-        FULL OUTER JOIN syndicates syndicate ON patient.syndicate_id=syndicate.id
-        WHERE patient.id IS NOT NULL''')
+        JOIN syndicates syndicate on patient.syndicate_id=syndicate.id
+	    ORDER BY patient.id;''')
     results = cur.fetchall()
     cur.close()
     return jsonify(results)
 
 
-@api.route('/reports', endpoint='reports')
+@api.route('/patients/query3', endpoint='query3')
+def api_home():
+    cur = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+    cur.execute('''SELECT
+                Slots_3.patient_id,
+                Slots_3.full_name
+            FROM 
+            (
+                SELECT
+                    Slots_2.patient_id,
+                    Slots_2.full_name,
+                    COUNT(*) as week_count
+                FROM
+                (
+                SELECT
+    				Slots.patient_id,
+    				Slots.week,
+    				Slots.full_name,
+    				COUNT(*) as appointments_count
+                FROM
+                (
+                    SELECT
+    	  				Patients.id AS patient_id,
+                        Extract(WEEK FROM Appointments.date) AS week,
+                        Patients.first_name || ' ' || Patients.last_name AS full_name
+                    FROM
+                        Patients, Appointments
+                    WHERE
+                        Appointments.patient_id = Patients.id AND 
+                        (Appointments.DATE >= NOW() - INTERVAL'1 MONTH') AND
+                        (Appointments.DATE <= NOW())
+                ) 
+                AS Slots
+    			GROUP BY
+	    			Slots.patient_id,
+   	    			Slots.full_name,
+                    Slots.week 
+            ) 
+                AS Slots_2
+                WHERE
+                    Slots_2.appointments_count >= 2
+                GROUP BY
+                    Slots_2.patient_id,
+                    Slots_2.full_name	
+            )
+            AS Slots_3
+            WHERE
+                Slots_3.week_count >= EXTRACT (WEEK FROM  NOW()) - EXTRACT 
+            (WEEK FROM  NOW() - INTERVAL'1 MONTH') + 1;
+''')
+    results = cur.fetchall()
+    cur.close()
+    return jsonify(results)
+
+
+@api.route('/reports/', endpoint='reports')
 def api_home():
     patient_id = request.args.get('patient_id', type=int)
     doctor_id = request.args.get('doctor_id', type=int)
@@ -63,7 +118,7 @@ def api_home():
     return jsonify(results)
 
 
-@api.route('/nurses', endpoint='nurses')
+@api.route('/nurses/', endpoint='nurses')
 def api_home():
     cur = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
     cur.execute('SELECT * FROM nurses')

@@ -63,6 +63,7 @@ export default new Vuex.Store({
         if (element.emergency_contact === ' () []') {
           element.emergency_contact = '';
         }
+        element.date_of_birth = new Date(element.date_of_birth).toLocaleDateString('ru');
       });
       commit('setPatients', json);
     },
@@ -84,7 +85,7 @@ export default new Vuex.Store({
       commit('setDoctors', json);
     },
     async query3({ commit }) {
-      const response = await fetch(`${API}/doctors/query3`);
+      const response = await fetch(`${API}/patients/query3`);
       const json = await response.json();
       commit('setPatients', json);
     },
