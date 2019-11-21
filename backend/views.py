@@ -7,7 +7,7 @@ api = Blueprint('api', __name__, url_prefix='/api')
 conn = psycopg2.connect(os.getenv('DATABASE_URL'))
 
 
-@api.route('/doctors', endpoint='doctors')
+@api.route('/doctors/', endpoint='doctors')
 def api_home():
     cur = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
     cur.execute('SELECT * FROM doctors')
@@ -30,7 +30,7 @@ def api_home():
     return jsonify(results)
 
 
-@api.route('/patients', endpoint='patients')
+@api.route('/patients/', endpoint='patients')
 def api_home():
     cur = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
     cur.execute('''SELECT patient.*, syndicate.name as syndicate_name 
@@ -42,7 +42,7 @@ def api_home():
     return jsonify(results)
 
 
-@api.route('/reports', endpoint='reports')
+@api.route('/reports/', endpoint='reports')
 def api_home():
     patient_id = request.args.get('patient_id', type=int)
     doctor_id = request.args.get('doctor_id', type=int)
@@ -63,7 +63,7 @@ def api_home():
     return jsonify(results)
 
 
-@api.route('/nurses', endpoint='nurses')
+@api.route('/nurses/', endpoint='nurses')
 def api_home():
     cur = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
     cur.execute('SELECT * FROM nurses')
