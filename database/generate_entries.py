@@ -22,37 +22,35 @@ loremIpsum = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit aliqua.'
 
 
 def generateBool():
-    """Generate either `true` or `false` string."""
-    if randint(0, 1):
-        return 'true'
-    return 'false'
+    """Generate either `true` or `false`."""
+    return randint(0, 1) == 1
 
 
 def generateCost():
-    """Generate Cost of a Doctor per hour in string."""
-    return str(randint(1, 70) * 100)
+    """Generate Cost of a Doctor per hour."""
+    return randint(1, 70) * 100
 
 
 def generateNSalary():
-    """Generate Nurse's monthly salary in string."""
-    return str(randint(100, 500) * 100)
+    """Generate Nurse's monthly salary."""
+    return randint(100, 500) * 100
 
 
 def generateSSalary():
-    """Generate Staff's monthly salary in string."""
-    return str(randint(25, 5240) * 100)
+    """Generate Staff's monthly salary."""
+    return randint(25, 5240) * 100
 
 
 LicenseIDs = set()
 
 
 def generateLicenseID():
-    """Generate unique license_id in string."""
+    """Generate unique license_id."""
     t = randint(100102, 997997)
     while t in LicenseIDs:
         t = randint(100102, 997997)
     LicenseIDs.add(t)
-    return str(t)
+    return t
 
 
 phnumbers = set()
@@ -93,7 +91,7 @@ def generateBlood():
 
 
 def generateECName():
-    """Generate Patients' emergency_contact_name (which is 'Name Surname'), in string surrounded by single quotes."""
+    """Generate Patients' emergency_contact_name (which is 'Name Surname')."""
     return choice(firstnames)[0:-1] + ' ' + choice(lastnames)[1:]
 
 
