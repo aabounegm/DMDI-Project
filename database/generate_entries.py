@@ -7,7 +7,7 @@ BS18-04: Abdelrahman Abounegm, Georgiy Stepanov, Vitaliy Korbashov,
 
 # Interactive Python script for an automatic and pseudo-random population of the database.
 # It provides sample data for each table (Task 4.a).
-# The result of this program is an "Output.txt" file,
+# The result of this program is an "Output.sql" file,
 # created in the same directory (from where the program was launched),
 # containing textual sequence of INSERT instructions to fill in the tables in the database with sample data.
 
@@ -150,7 +150,7 @@ print('DMD Project Phase 3 Script Population by Abdelrahman Abounegm, Georgiy St
 print('Vitaliy Korbashov, Pavel Tishkin, Yulia Chukanova - BS18-04.')
 print('This program generates a sequence of INSERT queries')
 print('to fill in the tables in the database with pseudo-random sample data.\n')
-fout = open('Output.txt', 'w')  # create an Output file with INSERT queries
+fout = open('Output.sql', 'w')  # create an Output file with INSERT queries
 with open('data/FirstNames.txt', 'r') as fnames:  # import list of First Names:
     firstnames = [f"'{row.strip()}'" for row in fnames]
 # import list of Last Names:
@@ -467,7 +467,5 @@ for i in range(numPS):  # generate INSERT statements for Patient_Subscription:
 fout.write('\n')
 print(numPS,
       'entries in Patient_Subscription have been successfully created.\n')
-
-# print('''"Output.txt" file with all INSERT statements
 
 fout.close()
