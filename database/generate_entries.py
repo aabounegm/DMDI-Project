@@ -301,7 +301,7 @@ for i in range(numPatients):  # generate INSERT statements for Patients:
         f"phone_number, syndicate_id, emergency_contact_name, emergency_contact_relation, "
         f"emergency_contact_phone_number) VALUES ({choice(firstnames)}, {choice(lastnames)}, "
         f"{generateDOB()}, {generateBlood()}, {generatePhnumber()}, {generateNumSyndicate()}, "
-        f"{generateECName()},{choice(relations)}, {generatePhnumber()});\n")
+        f"{generateECName()}, {choice(relations)}, {generatePhnumber()});\n")
 fout.write('\n')
 print(numPatients, 'Patients with Emergency contacts have been successfully created.\n')
 
