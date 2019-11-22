@@ -18,8 +18,6 @@ BS18-04: Abdelrahman Abounegm, Georgiy Stepanov, Vitaliy Korbashov,
 from random import randint, choice  # to generate pseudo-random numerical data
 from datetime import datetime  # to generate datetime in isoformat
 
-singleQuote = "'"
-comma = ', '
 loremIpsum = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit aliqua.'
 
 
@@ -156,26 +154,24 @@ print('This program generates a sequence of INSERT queries')
 print('to fill in the tables in the database with pseudo-random sample data.\n')
 fout = open('Output.txt', 'w')  # create an Output file with INSERT queries
 with open('data/FirstNames.txt', 'r') as fnames:  # import list of First Names:
-    firstnames = [singleQuote + row.strip() + singleQuote for row in fnames]
+    firstnames = [f"'{row.strip()}'" for row in fnames]
 # import list of Last Names:
 with open('data/LastNames.txt', 'r') as flastnames:
-    lastnames = [singleQuote + row.strip() + singleQuote for row in flastnames]
+    lastnames = [f"'{row.strip()}'" for row in flastnames]
 # import list of Doctors' specialities:
 with open('data/DoctorSpecialities.txt', 'r') as fspecialists:
-    specialists = [singleQuote +
-                   row.strip() + singleQuote for row in fspecialists]
+    specialists = [f"'{row.strip()}'" for row in fspecialists]
 with open('data/Jobs.txt', 'r') as fjobs:  # import list of Jobs:
-    jobs = [singleQuote + row.strip() + singleQuote for row in fjobs]
+    jobs = [f"'{row.strip()}'" for row in fjobs]
 # import list of emergency_contact_relation:
 with open('data/ECRelations.txt', 'r') as frelations:
-    relations = [singleQuote + row.strip() + singleQuote for row in frelations]
+    relations = [f"'{row.strip()}'" for row in frelations]
 # import list of Diagnoses:
 with open('data/Diagnoses.txt', 'r') as fdiagnoses:
-    diagnoses = [singleQuote + row.strip() + singleQuote for row in fdiagnoses]
+    diagnoses = [f"'{row.strip()}'" for row in fdiagnoses]
 # import list of Additional_Notes:
 with open('data/AdditionalNotes.txt', 'r') as faddnotes:
-    AdditionalNotes = [singleQuote +
-                       row.strip() + singleQuote for row in faddnotes]
+    AdditionalNotes = [f"'{row.strip()}'" for row in faddnotes]
 
 print('Enter number of Doctors you want in the database')
 print("(to use the default value of 400 for the stress-test, just press 'Enter'): ", end='')
