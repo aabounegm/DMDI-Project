@@ -333,10 +333,18 @@ except Exception:
 if numReports < 0:
     print('Using the default value of 17346...')
     numReports = 17346
+if numReports > numAppointments:
+    numReports = numAppointments
+    print('Cannot have more reports than appointments. Restricting to', numReports)
+keys = set()
 for i in range(numReports):  # generate INSERT statements for Reports:
+    appoint_id = randint(1, numAppointments)
+    while appoint_id in keys:
+        appoint_id = randint(1, numAppointments)
+    keys.add(appoint_id)
     fout.write(
         f"INSERT INTO Reports (diagnosis, additional_notes, needs_follow_up, appointment_id) VALUES ("
-        f"{choice(diagnoses)}, {choice(AdditionalNotes)}, {generateBool()}, {randint(1, numAppointments)});\n")
+        f"{choice(diagnoses)}, {choice(AdditionalNotes)}, {generateBool()}, {appoint_id});\n")
 fout.write('\n')
 print(numReports,
       'Reports belonging to Appointments have been successfully created.\n')
@@ -390,9 +398,19 @@ except Exception:
 if numDS < 0:
     print('Using the default value of 150...')
     numDS = 150
+if numDS > numDoctors * numNoticeBoards:
+    numDS = numDoctors * numNoticeBoards
+    print('Impossible. Restricting to', numDS)
+keys = set()
 for i in range(numDS):  # generate INSERT statements for Doctor_Subscription:
+    doc_id = randint(1, numDoctors)
+    board_id = randint(1, numNoticeBoards)
+    while (doc_id, board_id) in keys:
+        doc_id = randint(1, numDoctors)
+        board_id = randint(1, numNoticeBoards)
+    keys.add((doc_id, board_id))
     fout.write(f"INSERT INTO Doctor_Subscription (doctor_id, board_id) VALUES ("
-               f"{randint(1, numDoctors)}, {randint(1, numNoticeBoards)});\n")
+               f"{doc_id}, {board_id});\n")
 fout.write('\n')
 print(numDS, 'entries in Doctor_Subscription have been successfully created.\n')
 
@@ -406,9 +424,19 @@ except Exception:
 if numNS < 0:
     print('Using the default value of 300...')
     numNS = 300
+if numNS > numNurses * numNoticeBoards:
+    numNS = numNurses * numNoticeBoards
+    print('Impossible. Restricting to', numNS)
+keys = set()
 for i in range(numNS):  # generate INSERT statements for Nurse_Subscription:
+    nurse_id = randint(1, numNurses)
+    board_id = randint(1, numNoticeBoards)
+    while (nurse_id, board_id) in keys:
+        nurse_id = randint(1, numNurses)
+        board_id = randint(1, numNoticeBoards)
+    keys.add((nurse_id, board_id))
     fout.write(f"INSERT INTO Nurse_Subscription (nurse_id, board_id) VALUES ("
-               f"{randint(1, numNurses)}, {randint(1, numNoticeBoards)});\n")
+               f"{nurse_id}, {board_id});\n")
 fout.write('\n')
 print(numNS, 'entries in Nurse_Subscription have been successfully created.\n')
 
@@ -422,10 +450,20 @@ except Exception:
 if numPS < 0:
     print('Using the default value of 444...')
     numPS = 444
+if numPS > numPatients * numNoticeBoards:
+    numPS = numPatients * numNoticeBoards
+    print('Impossible. Restricting to', numPS)
+keys = set()
 for i in range(numPS):  # generate INSERT statements for Patient_Subscription:
+    pat_id = randint(1, numPatients)
+    board_id = randint(1, numNoticeBoards)
+    while (pat_id, board_id) in keys:
+        pat_id = randint(1, numPatients)
+        board_id = randint(1, numNoticeBoards)
+    keys.add((pat_id, board_id))
     fout.write(
         f"INSERT INTO Patient_Subscription (patient_id, board_id) VALUES ("
-        f"{randint(1, numPatients)}, {randint(1, numNoticeBoards)});\n")
+        f"{pat_id}, {board_id});\n")
 fout.write('\n')
 print(numPS,
       'entries in Patient_Subscription have been successfully created.\n')
