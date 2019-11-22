@@ -168,19 +168,19 @@ print('Vitaliy Korbashov, Pavel Tishkin, Yulia Chukanova - BS18-04.')
 print('This program generates a sequence of INSERT queries')
 print('to fill in the tables in the database with pseudo-random sample data.\n')
 fout = open('Output.txt', 'w')  # create an Output file with INSERT queries
-with open('FirstNames.txt', 'r') as fnames:  # import list of First Names:
+with open('data/FirstNames.txt', 'r') as fnames:  # import list of First Names:
     firstnames = [singleQuote + row.strip() + singleQuote for row in fnames]
-with open('LastNames.txt', 'r') as flastnames:  # import list of Last Names:
+with open('data/LastNames.txt', 'r') as flastnames:  # import list of Last Names:
     lastnames = [singleQuote + row.strip() + singleQuote for row in flastnames]
-with open('DoctorSpecialities.txt', 'r') as fspecialists:  # import list of Doctors' specialities:
+with open('data/DoctorSpecialities.txt', 'r') as fspecialists:  # import list of Doctors' specialities:
     specialists = [singleQuote + row.strip() + singleQuote for row in fspecialists]
-with open('Jobs.txt', 'r') as fjobs:  # import list of Jobs:
+with open('data/Jobs.txt', 'r') as fjobs:  # import list of Jobs:
     jobs = [singleQuote + row.strip() + singleQuote for row in fjobs]
-with open('ECRelations.txt', 'r') as frelations:  # import list of emergency_contact_relation:
+with open('data/ECRelations.txt', 'r') as frelations:  # import list of emergency_contact_relation:
     relations = [singleQuote + row.strip() + singleQuote for row in frelations]
-with open('Diagnoses.txt', 'r') as fdiagnoses:  # import list of Diagnoses:
+with open('data/Diagnoses.txt', 'r') as fdiagnoses:  # import list of Diagnoses:
     diagnoses = [singleQuote + row.strip() + singleQuote for row in fdiagnoses]
-with open('AdditionalNotes.txt', 'r') as faddnotes:  # import list of Additional_Notes:
+with open('data/AdditionalNotes.txt', 'r') as faddnotes:  # import list of Additional_Notes:
     AdditionalNotes = [singleQuote + row.strip() + singleQuote for row in faddnotes]
 
 print('Enter number of Doctors you want in the database')
@@ -299,7 +299,7 @@ if (numSyndicates < 0 or numSyndicates > 30):
     numSyndicates = 30
 if (numSyndicates != 0):
     # generate atomic INSERT statement for Syndicates:
-    with open('Syndicates.txt', 'r') as fsyndicates:
+    with open('data/Syndicates.txt', 'r') as fsyndicates:
         fout.write("INSERT INTO Syndicates (name) VALUES ('")
         n = 0
         for line in fsyndicates:
