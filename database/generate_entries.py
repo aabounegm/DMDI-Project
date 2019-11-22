@@ -25,7 +25,7 @@ loremIpsum = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit aliqua.'
 
 def generateBool():
     """Generate either `true` or `false` string."""
-    if (randint(0, 1)):
+    if randint(0, 1):
         return 'true'
     return 'false'
 
@@ -74,11 +74,11 @@ def generateRoom():
     room = str(randint(1, 5) * 100 + randint(1, 99))
     t = randint(0, 10)
     # note that either 'A', 'B', 'C' or nothing can be added in the end of the three-digit number:
-    if (t == 1 or t == 2):
+    if t == 1 or t == 2:
         return singleQuote + room + 'A' + singleQuote
-    elif (t == 3):
+    elif t == 3:
         return singleQuote + room + 'B' + singleQuote
-    elif (t == 4):
+    elif t == 4:
         return singleQuote + room + 'C' + singleQuote
     else:
         return singleQuote + room + singleQuote
@@ -103,7 +103,7 @@ def generateECName():
 
 def generateNumSyndicate():
     """Generate the number of Syndicate to which the Person belongs to."""
-    if (randint(0, 3)):
+    if randint(0, 3):
         return str(randint(1, numSyndicates))
     return 'null'
 
@@ -111,13 +111,13 @@ def generateNumSyndicate():
 def generateDOB():
     """Generate Patient's date_of_birth in format 'yyyy.mm.dd' in string surrounded by single quotes."""
     month = str(randint(1, 12))
-    if (month == '2'):
+    if month == '2':
         day = str(randint(1, 28))
     else:
         day = str(randint(1, 30))
-    if (len(month) < 2):
+    if len(month) < 2:
         month = '0' + month
-    if (len(day) < 2):
+    if len(day) < 2:
         day = '0' + day
     return singleQuote + str(randint(
         1950, 2015)) + '.' + month + '.' + day + singleQuote
@@ -126,7 +126,7 @@ def generateDOB():
 def generateMinute():
     """Generate a string from "00" to "55" divisible by 5."""
     t = str(randint(0, 11) * 5)
-    if (len(t) < 2):
+    if len(t) < 2:
         t = '0' + t
     return t
 
@@ -141,7 +141,7 @@ def generateDateTime():
 def generateTime1():
     """Generate the time from which a person starts working in the morning (from '07:00' to '10:55'), in string surrounded by single quotes."""
     hour = str(randint(7, 10))
-    if (len(hour) < 2):
+    if len(hour) < 2:
         hour = '0' + hour
     return singleQuote + hour + ':' + generateMinute() + singleQuote
 
@@ -190,7 +190,7 @@ try:  # check the input:
 except Exception:
     print('Using the default value of 400...')
     numDoctors = 400
-if (numDoctors < 0):
+if numDoctors < 0:
     print('Using the default value of 400...')
     numDoctors = 400
 for i in range(numDoctors):  # generate INSERT statements for Doctors:
@@ -205,7 +205,7 @@ fout.write('\n')
 # generate Working hours for each Doctor...
 for doc in range(1, numDoctors + 1):
     for day in range(1, 6):  # ...on each day:
-        if (randint(0, 1)):
+        if randint(0, 1):
             # Working hours before lunch-break:
             fout.write(
                 'INSERT INTO Doctor_Working_Hours (doctor_id, start_time, end_time, day) VALUES ('
@@ -227,7 +227,7 @@ try:  # check the input:
 except Exception:
     print('Using the default value of 1000...')
     numNurses = 1000
-if (numNurses < 0):
+if numNurses < 0:
     print('Using the default value of 1000...')
     numNurses = 1000
 for i in range(numNurses):  # generate INSERT statements for Nurses:
@@ -240,7 +240,7 @@ fout.write('\n')
 # generate Working hours for each Nurse...
 for nurse in range(1, numNurses + 1):
     for day in range(1, 6):  # ...on each day:
-        if (randint(0, 1)):
+        if randint(0, 1):
             # Working hours before lunch-break:
             fout.write(
                 'INSERT INTO Nurse_Working_Hours (nurse_id, start_time, end_time, day) VALUES ('
@@ -261,7 +261,7 @@ try:  # check the input:
 except Exception:
     print('Using the default value of 500...')
     numStaff = 500
-if (numStaff < 0):
+if numStaff < 0:
     print('Using the default value of 500...')
     numStaff = 500
 for i in range(numStaff):  # generate INSERT statements for Staff:
@@ -273,7 +273,7 @@ fout.write('\n')
 # generate Working hours for each Staff...
 for staff in range(1, numStaff + 1):
     for day in range(1, 6):  # ...on each day:
-        if (randint(0, 1)):
+        if randint(0, 1):
             # Working hours before lunch-break:
             fout.write(
                 'INSERT INTO Staff_Working_Hours (staff_id, start_time, end_time, day) VALUES ('
@@ -294,10 +294,10 @@ try:  # check the input:
 except Exception:
     print('Using the default value of 30...')
     numSyndicates = 30
-if (numSyndicates < 0 or numSyndicates > 30):
+if numSyndicates < 0 or numSyndicates > 30:
     print('Using the default value of 30...')
     numSyndicates = 30
-if (numSyndicates != 0):
+if numSyndicates != 0:
     # generate atomic INSERT statement for Syndicates:
     with open('data/Syndicates.txt', 'r') as fsyndicates:
         fout.write("INSERT INTO Syndicates (name) VALUES ('")
@@ -305,7 +305,7 @@ if (numSyndicates != 0):
         for line in fsyndicates:
             fout.write(line.rstrip() + "')")
             n += 1
-            if (n == numSyndicates):
+            if n == numSyndicates:
                 break
             fout.write(", ('")
         fout.write(';\n\n')
@@ -318,7 +318,7 @@ try:  # check the input:
 except Exception:
     print('Using the default value of 10000...')
     numPatients = 10000
-if (numPatients < 0):
+if numPatients < 0:
     print('Using the default value of 10000...')
     numPatients = 10000
 for i in range(numPatients):  # generate INSERT statements for Patients:
@@ -341,7 +341,7 @@ try:  # check the input:
 except Exception:
     print('Using the default value of 20000...')
     numAppointments = 20000
-if (numAppointments < 0):
+if numAppointments < 0:
     print('Using the default value of 20000...')
     numAppointments = 20000
 for i in range(numAppointments):  # generate INSERT statements for Appointmens:
@@ -361,7 +361,7 @@ try:  # check the input:
 except Exception:
     print('Using the default value of 17346...')
     numReports = 17346
-if (numReports < 0):
+if numReports < 0:
     print('Using the default value of 17346...')
     numReports = 17346
 for i in range(numReports):  # generate INSERT statements for Reports:
@@ -381,7 +381,7 @@ try:  # check the input:
 except Exception:
     print('Using the default value of 100...')
     numNoticeBoards = 100
-if (numNoticeBoards < 0):
+if numNoticeBoards < 0:
     print('Using the default value of 100...')
     numNoticeBoards = 100
 # generate INSERT statements for NoticeBoards:
@@ -400,7 +400,7 @@ try:  # check the input:
 except Exception:
     print('Using the default value of 500...')
     numNotices = 500
-if (numNotices < 0):
+if numNotices < 0:
     print('Using the default value of 500...')
     numNotices = 500
 for i in range(numNotices):  # generate INSERT statements for Notices:
@@ -409,7 +409,7 @@ for i in range(numNotices):  # generate INSERT statements for Notices:
         + str(randint(1, numNoticeBoards)) + comma + "'Notice " + str(i + 1) +
         " title'" + comma + singleQuote + loremIpsum + singleQuote + comma +
         singleQuote + generateDateTime() + singleQuote + comma)
-    if (randint(0, 2)):
+    if randint(0, 2):
         fout.write('null' + comma + str(randint(1, numNurses)) + ');\n')
     else:
         fout.write(str(randint(1, numDoctors)) + comma + 'null);\n')
@@ -423,7 +423,7 @@ try:  # check the input:
 except Exception:
     print('Using the default value of 150...')
     numDS = 150
-if (numDS < 0):
+if numDS < 0:
     print('Using the default value of 150...')
     numDS = 150
 for i in range(numDS):  # generate INSERT statements for Doctor_Subscription:
@@ -440,7 +440,7 @@ try:  # check the input:
 except Exception:
     print('Using the default value of 300...')
     numNS = 300
-if (numNS < 0):
+if numNS < 0:
     print('Using the default value of 300...')
     numNS = 300
 for i in range(numNS):  # generate INSERT statements for Nurse_Subscription:
@@ -457,7 +457,7 @@ try:  # check the input:
 except Exception:
     print('Using the default value of 444...')
     numPS = 444
-if (numPS < 0):
+if numPS < 0:
     print('Using the default value of 444...')
     numPS = 444
 for i in range(numPS):  # generate INSERT statements for Patient_Subscription:
