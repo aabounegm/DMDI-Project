@@ -91,9 +91,9 @@ def generateBlood():
     """Generate 1 of 6 possible blood types, surrounded by single quotes."""
     t = randint(0, 3)
     if randint(0, 1):
-        return singleQuote + bloodTypes[t] + '+' + singleQuote
+        return f"'{bloodTypes[t]}+'"
     else:
-        return singleQuote + bloodTypes[t] + '-' + singleQuote
+        return f"'{bloodTypes[t]}-'"
 
 
 def generateECName():
@@ -110,25 +110,18 @@ def generateNumSyndicate():
 
 def generateDOB():
     """Generate Patient's date_of_birth in format 'yyyy.mm.dd' in string surrounded by single quotes."""
-    month = str(randint(1, 12))
-    if month == '2':
-        day = str(randint(1, 28))
+    month = randint(1, 12)
+    if month == 2:
+        day = randint(1, 28)
     else:
-        day = str(randint(1, 30))
-    if len(month) < 2:
-        month = '0' + month
-    if len(day) < 2:
-        day = '0' + day
-    return singleQuote + str(randint(
-        1950, 2015)) + '.' + month + '.' + day + singleQuote
+        day = randint(1, 30)
+    return f"'{randint(1950, 2015)}.{month:02d}.{day:02d}'"
 
 
 def generateMinute():
     """Generate a string from "00" to "55" divisible by 5."""
-    t = str(randint(0, 11) * 5)
-    if len(t) < 2:
-        t = '0' + t
-    return t
+    t = randint(0, 11) * 5
+    return f"{t:02d}"
 
 
 def generateDateTime():
@@ -141,26 +134,22 @@ def generateDateTime():
 def generateTime1():
     """Generate the time from which a person starts working in the morning (from '07:00' to '10:55'), in string surrounded by single quotes."""
     hour = str(randint(7, 10))
-    if len(hour) < 2:
-        hour = '0' + hour
-    return singleQuote + hour + ':' + generateMinute() + singleQuote
+    return f"'{hour:02d}:{generateMinute()}'"
 
 
 def generateTime2():
     """Generate the time from which a person has lunch-break (from '12:00' to '13:55'), in string surrounded by single quotes."""
-    return singleQuote + str(randint(
-        12, 13)) + ':' + generateMinute() + singleQuote
+    return f"'{randint(12, 13)}:{generateMinute()}'"
 
 
 def generateTime3():
     """Generate the time from which a person starts working in the evening (till which has lunch-break), that is from '15:00' to '16:55', in string surrounded by single quotes."""
-    return singleQuote + str(randint(
-        15, 16)) + ':' + generateMinute() + singleQuote
+    return f"'{randint(15, 16)}:{generateMinute()}'"
 
 
 def generateTime4():
     """Generate the time till which a person works in the evening (the end of a workday), that is from '18:00' to '22:55', in string surrounded by single quotes."""
-    return singleQuote + str(randint(18, 22)) + ':' + generateMinute() + singleQuote
+    return f"'{randint(18, 22)}:{generateMinute()}'"
 
 
 print('DMD Project Phase 3 Script Population by Abdelrahman Abounegm, Georgiy Stepanov,')
@@ -217,8 +206,7 @@ for doc in range(1, numDoctors + 1):
                 + str(doc) + comma + generateTime3() + comma +
                 generateTime4() + comma + str(day) + ');\n')
 fout.write('\n')
-print(numDoctors,
-      'Doctors and their timetable have been successfully created.\n')
+print(numDoctors, 'Doctors and their timetable have been successfully created.\n')
 
 print('Enter number of Nurses you want in the database')
 print("(to use the default value of 1000 for the stress-test, just press 'Enter'): ", end='')
