@@ -30,6 +30,90 @@ def api_home():
     return jsonify(results)
 
 
+@api.route('/doctors/query5', endpoint='query5')
+def api_home():
+    cur = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+    cur.execute('''SELECT
+                        Doctors.id AS doctor_id,
+                        Doctors.first_name AS doctor_first_name,
+                        Doctors.last_name AS doctor_last_name
+                    FROM
+                        Doctors,
+                        (
+                            SELECT
+                                Patient_hundred.doctor_id
+                            FROM
+                            (
+                                SELECT
+                                    Patient_stability_hundred.doctor_id,
+                                    COUNT(*) as patients_visited
+                                FROM
+                                (
+                                    SELECT
+                                        Doctors.id AS doctor_id,
+                                        EXTRACT (YEAR FROM Appointments.date) as years
+                                    FROM
+                                        Patients, Appointments, Doctors
+                                    WHERE
+                                        Appointments.doctor_id = Doctors.id AND
+                                        Appointments.patient_id = Patients.id AND
+                                        (Appointments.DATE >= NOW() - INTERVAL'10 YEARS') AND
+                                        (Appointments.DATE <= NOW())
+                                ) AS Patient_stability_hundred
+                                GROUP BY
+                                    Patient_stability_hundred.doctor_id
+                            ) AS Patient_hundred
+                            WHERE
+                                Patient_hundred.patients_visited >= 100
+                        ) AS Patient_hundred_checked,
+                        (
+                            SELECT
+                                Patient_stability_2.doctor_id
+                            FROM
+                            (
+                                SELECT
+                                    Patient_stability.doctor_id,
+                                    COUNT(*) as years_stable
+                                FROM
+                                (
+                                    SELECT
+                                        Patient_stability_hundred.doctor_id,
+                                        Patient_stability_hundred.years,
+                                        COUNT(*) AS patients_visited
+                                    FROM
+                                    (
+                                        SELECT
+                                            Doctors.id AS doctor_id,
+                                            EXTRACT (YEAR FROM Appointments.date) as years
+                                        FROM
+                                            Patients, Appointments, Doctors
+                                        WHERE
+                                            Appointments.doctor_id = Doctors.id AND
+                                            Appointments.patient_id = Patients.id AND
+                                            (Appointments.DATE >= NOW() - INTERVAL'10 YEARS') AND
+                                            (Appointments.DATE <= NOW())
+                                    ) AS Patient_stability_hundred
+                                    GROUP BY
+                                        Patient_stability_hundred.doctor_id,
+                                        Patient_stability_hundred.years
+                                ) AS Patient_stability
+                                WHERE
+                                    Patient_stability.patients_visited > 5
+                                GROUP BY
+                                    Patient_stability.doctor_id
+                            ) AS Patient_stability_2
+                            WHERE
+                                Patient_stability_2.years_stable = 10
+                        ) AS Patient_stability_checked
+                    WHERE
+                        Doctors.id = Patient_stability_checked.doctor_id AND
+                        Doctors.id = Patient_hundred_checked.doctor_id;'''
+                )
+    results = cur.fetchall()
+    cur.close()
+    return jsonify(results)
+
+
 @api.route('/patients/', endpoint='patients')
 def api_home():
     cur = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
@@ -48,7 +132,7 @@ def api_home():
     cur.execute('''SELECT
                 Slots_3.patient_id,
                 Slots_3.full_name
-            FROM 
+            FROM
             (
                 SELECT
                     Slots_2.patient_id,
@@ -70,26 +154,26 @@ def api_home():
                     FROM
                         Patients, Appointments
                     WHERE
-                        Appointments.patient_id = Patients.id AND 
+                        Appointments.patient_id = Patients.id AND
                         (Appointments.DATE >= NOW() - INTERVAL'1 MONTH') AND
                         (Appointments.DATE <= NOW())
-                ) 
+                )
                 AS Slots
     			GROUP BY
 	    			Slots.patient_id,
    	    			Slots.full_name,
-                    Slots.week 
-            ) 
+                    Slots.week
+            )
                 AS Slots_2
                 WHERE
                     Slots_2.appointments_count >= 2
                 GROUP BY
                     Slots_2.patient_id,
-                    Slots_2.full_name	
+                    Slots_2.full_name
             )
             AS Slots_3
             WHERE
-                Slots_3.week_count >= EXTRACT (WEEK FROM  NOW()) - EXTRACT 
+                Slots_3.week_count >= EXTRACT (WEEK FROM  NOW()) - EXTRACT
             (WEEK FROM  NOW() - INTERVAL'1 MONTH') + 1;
 ''')
     results = cur.fetchall()
