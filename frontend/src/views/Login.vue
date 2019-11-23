@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    Current User: {{ currentUser }}
+    <pre>Current User: {{ currentUser | pretty }}</pre>
     <v-radio-group v-model="userType">
       <v-radio v-for="(value, type) in users" :key="type" :value="type">
         <template v-slot:label>
@@ -56,6 +56,9 @@ export default Vue.extend({
         return item.name;
       }
       return `${item.first_name} ${item.last_name}`;
+    },
+    pretty(value: Object) {
+      return JSON.stringify(value, null, 4);
     },
   },
 });

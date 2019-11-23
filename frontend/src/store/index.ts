@@ -79,8 +79,12 @@ export default new Vuex.Store({
       });
       commit('setReports', json);
     },
-    async query1({ commit }) {
-      const response = await fetch(`${API}/doctors/query1`);
+    async query1({ commit, state }) {
+      if (state.userType !== 'patient' || state.currentUser == null) {
+        alert('Please select a valid patient!');
+        return;
+      }
+      const response = await fetch(`${API}/doctors/query1?patient_id=${state.currentUser.id}`);
       const json = await response.json();
       commit('setDoctors', json);
     },
