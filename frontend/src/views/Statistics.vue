@@ -33,13 +33,13 @@ export default Vue.extend({
   computed: {
     events() {
       return this.$store.state.statistics.map((stat: any) => {
-        const start = new Date(2019, 9, stat.weekday + 1, stat.hours)
+        const start = new Date(2019, 9, stat.weekday + 1, stat.hours);
         return {
           name: `Avg: ${stat.average_num.toFixed(3)}, Total: ${stat.total_num}`,
-          start: `${start.getFullYear()}-${start.getMonth()}-${stat.weekday+1} ${stat.hours}:00`,
-          end: `${start.getFullYear()}-${start.getMonth()}-${stat.weekday+1} ${stat.hours+1}:00`,
-        }
-      })
+          start: `${start.getFullYear()}-${start.getMonth()}-${stat.weekday + 1} ${stat.hours}:00`,
+          end: `${start.getFullYear()}-${start.getMonth()}-${stat.weekday + 1} ${stat.hours + 1}:00`,
+        };
+      });
     },
   },
   created() {
