@@ -8,7 +8,7 @@ conn = psycopg2.connect(os.getenv('DATABASE_URL'))
 
 
 @api.route('/doctors/', endpoint='doctors')
-def api_home():
+def get_doctors():
     cur = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
     cur.execute('SELECT * FROM doctors')
     results = cur.fetchall()
@@ -17,7 +17,7 @@ def api_home():
 
 
 @api.route('/doctors/query1', endpoint='query1')
-def api_home():
+def query1():
     patient_id = request.args.get('patient_id', type=int)
     if patient_id is None:
         abort(400, 'Please select a valid patient')
@@ -64,7 +64,7 @@ def api_home():
 
 
 @api.route('/doctors/query2', endpoint='query2')
-def api_home():
+def query2():
     doctor_id = request.args.get('doctor_id', type=int)
     one_doctor = ''
     if doctor_id is not None:
@@ -111,7 +111,7 @@ def api_home():
 
 
 @api.route('/query4', endpoint='query4')
-def api_home():
+def query4():
     cur = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
     cur.execute('''SELECT SUM
                     (
@@ -162,7 +162,7 @@ def api_home():
 
 
 @api.route('/doctors/query5', endpoint='query5')
-def api_home():
+def query5():
     cur = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
     cur.execute('''SELECT
                         Doctors.id AS doctor_id,
@@ -246,7 +246,7 @@ def api_home():
 
 
 @api.route('/patients/', endpoint='patients')
-def api_home():
+def get_patients():
     cur = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
     cur.execute('''SELECT patient.*, syndicate.name as syndicate_name
         FROM patients patient
@@ -258,7 +258,7 @@ def api_home():
 
 
 @api.route('/patients/query3', endpoint='query3')
-def api_home():
+def query3():
     cur = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
     cur.execute('''SELECT
                 Slots_3.patient_id,
@@ -313,7 +313,7 @@ def api_home():
 
 
 @api.route('/reports/', endpoint='reports')
-def api_home():
+def get_reports():
     patient_id = request.args.get('patient_id', type=int)
     doctor_id = request.args.get('doctor_id', type=int)
     user_type = 'patient' if patient_id is not None else 'doctor' if doctor_id is not None else None
@@ -335,7 +335,7 @@ def api_home():
 
 
 @api.route('/nurses/', endpoint='nurses')
-def api_home():
+def get_nurses():
     cur = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
     cur.execute('SELECT * FROM nurses')
     results = cur.fetchall()
