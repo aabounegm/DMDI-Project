@@ -57,7 +57,7 @@ export default Vue.extend({
       }
       return `${item.first_name} ${item.last_name}`;
     },
-    pretty(value: Object) {
+    pretty(value: object) {
       return JSON.stringify(value, null, 4);
     },
   },
