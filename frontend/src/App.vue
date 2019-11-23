@@ -13,6 +13,10 @@
         Patients
       </v-btn>
       
+      <v-btn text v-if="$store.state.userType === 'doctor'" to="/statistics">
+        Statistics
+      </v-btn>
+      
       <v-btn v-if="$store.getters.canSeeReports" text to="/reports">
         My Reports
       </v-btn>

@@ -13,6 +13,7 @@ export default new Vuex.Store({
     nurses: [],
     patients: [],
     reports: [],
+    statistics: [],
   },
   mutations: {
     setUserType(state, payload) {
@@ -34,6 +35,9 @@ export default new Vuex.Store({
     },
     setReports(state, payload) {
       state.reports = payload;
+    },
+    setStatistics(state, payload) {
+      state.statistics = payload;
     },
   },
   actions: {
@@ -87,6 +91,15 @@ export default new Vuex.Store({
       const response = await fetch(`${API}/doctors/query1?patient_id=${state.currentUser.id}`);
       const json = await response.json();
       commit('setDoctors', json);
+    },
+    async query2({ commit, state }) {
+      if (state.userType !== 'doctor' || state.currentUser == null) {
+        alert('Please select a valid doctor!');
+        return;
+      }
+      const response = await fetch(`${API}/doctors/query2?doctor_id=${state.currentUser.id}`);
+      const json = await response.json();
+      commit('setStatistics', json);
     },
     async query3({ commit }) {
       const response = await fetch(`${API}/patients/query3`);

@@ -63,6 +63,53 @@ def api_home():
     return jsonify(results)
 
 
+@api.route('/doctors/query2', endpoint='query2')
+def api_home():
+    doctor_id = request.args.get('doctor_id', type=int)
+    one_doctor = ''
+    if doctor_id is not None:
+        one_doctor = f'AND Doctors.id = {doctor_id}'
+    cur = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+    cur.execute(f'''SELECT
+                    Slots.doctor_id,
+                    Slots.doctor_first_name,
+                    Slots.doctor_last_name,
+                    Slots.weekday,
+                    Slots.hours,
+                    COUNT(*) AS total_num,
+                    COUNT(*) / 52.0 AS average_num
+                FROM
+                (
+                    SELECT
+                        Doctors.id AS doctor_id,
+                        Doctors.first_name AS doctor_first_name,
+                        Doctors.last_name AS doctor_last_name,
+                        EXTRACT(DOW FROM Appointments.date) AS weekday,
+                        EXTRACT(HOUR FROM Appointments.date) AS hours
+                    FROM
+                        Doctors, Appointments
+                    WHERE
+                        Appointments.doctor_id = Doctors.id AND
+                        (Appointments.DATE >= NOW() - INTERVAL'20 YEARS')
+                        AND (Appointments.DATE <= NOW())
+                        {one_doctor}
+                ) AS Slots
+                GROUP BY
+                    Slots.doctor_id,
+                    Slots.doctor_first_name,
+                    Slots.doctor_last_name,
+                    Slots.weekday,
+                    Slots.hours
+                ORDER BY
+                    total_num DESC;''',
+                )
+    results = cur.fetchall()
+    cur.close()
+    for item in results:
+        item['average_num'] = float(item['average_num'])
+    return jsonify(results)
+
+
 @api.route('/doctors/query5', endpoint='query5')
 def api_home():
     cur = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
