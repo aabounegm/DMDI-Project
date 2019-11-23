@@ -1,0 +1,51 @@
+Addiction physician
+Allergologist
+Anatomist
+Andrologist
+Anesthesiologist
+Cardiologists
+Coroner
+Dermatologist
+Diabetologist
+Endocrinologist
+Fictional medical specialist
+Gastroenterologist
+General practitioner
+Geriatrician
+Gynaecologist
+Hematologist
+High-altitude medicine physician
+Hygienist
+Immunologist
+Infectious disease physician
+Intensivist
+Internist
+Leprologist
+Military doctor
+Nephrologist
+Neurologist
+Neurosurgeon
+Nuclear medicine physician
+Obstetrician
+Oncologist
+Ophthalmologist
+Osteopathic physician
+Otolaryngologist
+Pain management physician
+Palliative care physician
+Pathologist
+Pediatrician
+Pharmacologist
+Podiatrist
+Psychiatrist
+Pulmonologist
+Radiologist
+Rehabilitation physician
+Rheumatologist
+Sports physician
+Surgeon
+Teratologist
+Toxicologist
+Traditional medicine practitioner
+Urologist
+Virologist
