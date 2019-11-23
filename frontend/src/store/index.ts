@@ -106,6 +106,11 @@ export default new Vuex.Store({
       const json = await response.json();
       commit('setPatients', json);
     },
+    async query4({ commit }) {
+      const response = await fetch(`${API}/query4`);
+      const json = await response.json();
+      return json;
+    },
     async query5({ commit }) {
       const response = await fetch(`${API}/doctors/query5`);
       const json = await response.json();
