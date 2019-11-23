@@ -89,6 +89,11 @@ export default new Vuex.Store({
       const json = await response.json();
       commit('setPatients', json);
     },
+    async query5({ commit }) {
+      const response = await fetch(`${API}/doctors/query5`);
+      const json = await response.json();
+      commit('setDoctors', json);
+    },
   },
   getters: {
     canSeeReports: (state) => state.currentUser != null && ['doctor', 'patient'].includes(state.userType),

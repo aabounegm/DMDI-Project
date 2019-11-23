@@ -17,6 +17,9 @@
             <v-btn @click="query1">
               (1) First/Last = M/L
             </v-btn>
+            <v-btn @click="query5">
+              (5) patients>=5/year (100 total) 
+            </v-btn>
             <v-spacer></v-spacer>
             <v-text-field
               v-model="search"
@@ -52,6 +55,6 @@ export default Vue.extend({
   created() {
     this.$store.dispatch('getDoctors');
   },
-  methods: mapActions(['query1']),
+  methods: mapActions(['query1', 'query5']),
 });
 </script>
