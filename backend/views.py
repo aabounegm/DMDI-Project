@@ -325,8 +325,9 @@ def api_home():
             CONCAT(patient.first_name, ' ', patient.last_name) as patient_name,
             CONCAT(doctor.first_name, ' ', doctor.last_name) as doctor_name,
             report.diagnosis, report.additional_notes, report.needs_follow_up, report.date
-        FROM Reports report, Patients patient, Doctors doctor
-        WHERE report.{user_type}_id = %s AND report.patient_id=patient.id AND doctor.id=report.doctor_id; ''',
+        FROM Reports report, Patients patient, Doctors doctor, Appointments appointment
+        WHERE appointment.{user_type}_id = %s AND appointment.patient_id=patient.id
+            AND doctor.id=appointment.doctor_id AND report.appointment_id=appointment.id;''',
                 (patient_id if user_type == 'patient' else doctor_id,))
     results = cur.fetchall()
     cur.close()
