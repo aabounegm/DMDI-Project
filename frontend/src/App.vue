@@ -2,9 +2,9 @@
   <v-app>
     <v-app-bar app>
       <v-toolbar-title style="margin-right: 20px;" class="headline text-uppercase">
-        <span>Hospital</span>
+        <router-link to="/" tag="span" style="cursor: pointer;">Hospital</router-link>
       </v-toolbar-title>
-
+      
       <v-btn text to="/doctors">
         Doctors
       </v-btn>
