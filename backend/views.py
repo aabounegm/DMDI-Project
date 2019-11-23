@@ -90,7 +90,7 @@ def query2():
                         Doctors, Appointments
                     WHERE
                         Appointments.doctor_id = Doctors.id AND
-                        (Appointments.DATE >= NOW() - INTERVAL'20 YEARS')
+                        (Appointments.DATE >= NOW() - INTERVAL'1 YEAR')
                         AND (Appointments.DATE <= NOW())
                         {one_doctor}
                 ) AS Slots
