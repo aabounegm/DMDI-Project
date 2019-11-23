@@ -18,12 +18,45 @@ def api_home():
 
 @api.route('/doctors/query1', endpoint='query1')
 def api_home():
+    patient_id = request.args.get('patient_id', type=int)
+    if patient_id is None:
+        abort(400, 'Please select a valid patient')
     cur = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
-    cur.execute('''SELECT * from Doctors
-        WHERE (first_name LIKE 'M%%' AND last_name NOT LIKE 'M%%')
-           OR (first_name LIKE 'L%%' AND last_name NOT LIKE 'L%%')
-           OR (first_name NOT LIKE 'M%%' AND last_name LIKE 'M%%')
-           OR (first_name NOT LIKE 'L%%' AND last_name LIKE 'L%%')'''
+    cur.execute('''SELECT DISTINCT
+                        Doctors.*
+                    FROM
+                        Doctors, Appointments,
+                        (
+                            SELECT DISTINCT
+                                Patients.id AS patient_id,
+                                Appointments.date AS appointment_date
+                            FROM
+                                Appointments,
+                                Patients
+                            WHERE
+                                Patients.id = %s AND Patients.id = Appointments.patient_id
+                                AND Appointments.date < NOW()
+                            ORDER BY
+                                date
+                                DESC LIMIT 1
+                        ) AS Patient_last_visit
+                    WHERE
+                    (
+                        (first_name LIKE 'M%%' AND last_name NOT LIKE 'M%%')
+                        OR
+                        (first_name LIKE 'L%%' AND last_name NOT LIKE 'L%%')
+                        OR
+                        (first_name NOT LIKE 'M%%' AND last_name LIKE 'M%%')
+                        OR
+                        (first_name NOT LIKE 'L%%' AND last_name LIKE 'L%%')
+                    )
+                    AND
+                        Appointments.doctor_id = Doctors.id
+                    AND
+                        Appointments.patient_id = Patient_last_visit.patient_id
+                    AND
+                        Appointments.date::DATE = Patient_last_visit.appointment_date::DATE''',
+                (patient_id,)
                 )
     results = cur.fetchall()
     cur.close()
@@ -48,7 +81,7 @@ def api_home():
     cur.execute('''SELECT
                 Slots_3.patient_id,
                 Slots_3.full_name
-            FROM 
+            FROM
             (
                 SELECT
                     Slots_2.patient_id,
@@ -70,26 +103,26 @@ def api_home():
                     FROM
                         Patients, Appointments
                     WHERE
-                        Appointments.patient_id = Patients.id AND 
+                        Appointments.patient_id = Patients.id AND
                         (Appointments.DATE >= NOW() - INTERVAL'1 MONTH') AND
                         (Appointments.DATE <= NOW())
-                ) 
+                )
                 AS Slots
     			GROUP BY
 	    			Slots.patient_id,
    	    			Slots.full_name,
-                    Slots.week 
-            ) 
+                    Slots.week
+            )
                 AS Slots_2
                 WHERE
                     Slots_2.appointments_count >= 2
                 GROUP BY
                     Slots_2.patient_id,
-                    Slots_2.full_name	
+                    Slots_2.full_name
             )
             AS Slots_3
             WHERE
-                Slots_3.week_count >= EXTRACT (WEEK FROM  NOW()) - EXTRACT 
+                Slots_3.week_count >= EXTRACT (WEEK FROM  NOW()) - EXTRACT
             (WEEK FROM  NOW() - INTERVAL'1 MONTH') + 1;
 ''')
     results = cur.fetchall()
