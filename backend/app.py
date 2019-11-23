@@ -6,7 +6,7 @@ import os
 app = Flask(__name__)
 CORS(app)
 app.register_blueprint(api, url_prefix='/api')
-
+app.url_map.strict_slashes = False
 
 @app.route('/', defaults={'path': 'index.html'})
 @app.route('/<path:path>')
