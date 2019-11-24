@@ -47,17 +47,17 @@ export default new Vuex.Store({
       dispatch('getPatients');
     },
     async getDoctors({ commit }) {
-      const response = await fetch(`${API}/doctors`);
+      const response = await fetch(`${API}/doctors/`);
       const json = await response.json();
       commit('setDoctors', json);
     },
     async getNurses({ commit }) {
-      const response = await fetch(`${API}/nurses`);
+      const response = await fetch(`${API}/nurses/`);
       const json = await response.json();
       commit('setNurses', json);
     },
     async getPatients({ commit }) {
-      const response = await fetch(`${API}/patients`);
+      const response = await fetch(`${API}/patients/`);
       const json = await response.json();
       json.forEach((element: any) => {
         const name = element.emergency_contact_name || '';
@@ -72,7 +72,7 @@ export default new Vuex.Store({
       commit('setPatients', json);
     },
     async getReports({ commit, state }) {
-      const response = await fetch(`${API}/reports?${state.userType}_id=${state.currentUser.id}`);
+      const response = await fetch(`${API}/reports/?${state.userType}_id=${state.currentUser.id}`);
       const json = await response.json();
       json.forEach((element: any) => {
         if (element.needs_follow_up) {
