@@ -1,11 +1,6 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 import Home from '../views/Home.vue';
-import Login from '../views/Login.vue';
-import Doctors from '../views/Doctors.vue';
-import Patients from '../views/Patients.vue';
-import Reports from '../views/Reports.vue';
-import Stats from '../views/Statistics.vue';
 import store from '../store/index';
 
 Vue.use(VueRouter);
@@ -22,22 +17,22 @@ const router = new VueRouter({
     {
       path: '/login',
       name: 'login',
-      component: Login,
+      component: () => import('../views/Login.vue'),
     },
     {
       path: '/doctors',
       name: 'doctors',
-      component: Doctors,
+      component: () => import('../views/Doctors.vue'),
     },
     {
       path: '/patients',
       name: 'patients',
-      component: Patients,
+      component: () => import('../views/Patients.vue'),
     },
     {
       path: '/statistics',
       name: 'statistics',
-      component: Stats,
+      component: () => import('../views/Statistics.vue'),
       beforeEnter(from, to, next) {
         if (store.state.currentUser == null || store.state.userType !== 'doctor') {
           next('/login');
@@ -48,7 +43,7 @@ const router = new VueRouter({
     {
       path: '/reports',
       name: 'Reports',
-      component: Reports,
+      component: () => import('../views/Reports.vue'),
       beforeEnter(from, to, next) {
         if (store.state.currentUser == null) {
           next('/login');
