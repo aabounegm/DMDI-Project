@@ -324,7 +324,7 @@ def get_reports():
         SELECT
             CONCAT(patient.first_name, ' ', patient.last_name) as patient_name,
             CONCAT(doctor.first_name, ' ', doctor.last_name) as doctor_name,
-            report.diagnosis, report.additional_notes, report.needs_follow_up, report.date
+            report.diagnosis, report.additional_notes, report.needs_follow_up, appointment.date
         FROM Reports report, Patients patient, Doctors doctor, Appointments appointment
         WHERE appointment.{user_type}_id = %s AND appointment.patient_id=patient.id
             AND doctor.id=appointment.doctor_id AND report.appointment_id=appointment.id;''',
