@@ -12,20 +12,13 @@ FROM
 		WHERE
 			Patients.id = 1 AND Patients.id = Appointments.patient_id
 			AND Appointments.date < NOW()
+			AND Patients.gender = 'f'
 		ORDER BY
 			date
 			DESC LIMIT 1
 	) AS Patient_last_visit
 WHERE
-(
-	(first_name LIKE 'M%' AND last_name NOT LIKE 'M%')
-	OR
-	(first_name LIKE 'L%' AND last_name NOT LIKE 'L%')
-	OR
-	(first_name NOT LIKE 'M%' AND last_name LIKE 'M%')
-	OR
-	(first_name NOT LIKE 'L%' AND last_name LIKE 'L%')
-)
+	(first_name LIKE 'M%' OR first_name LIKE 'L%') != (last_name LIKE 'M%' OR last_name LIKE 'L%')
 AND
 	Appointments.doctor_id = Doctors.id
 AND
