@@ -165,9 +165,7 @@ def query4():
 def query5():
     cur = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
     cur.execute('''SELECT
-                        Doctors.id AS doctor_id,
-                        Doctors.first_name AS doctor_first_name,
-                        Doctors.last_name AS doctor_last_name
+                        Doctors.*
                     FROM
                         Doctors,
                         (
