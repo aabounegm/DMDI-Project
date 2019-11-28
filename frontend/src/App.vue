@@ -13,7 +13,7 @@
         Patients
       </v-btn>
       
-      <v-btn text v-if="$store.state.userType === 'doctor'" to="/statistics">
+      <v-btn text v-if="$store.state.userType === 'doctor' && $store.state.currentUser != null" to="/statistics">
         Statistics
       </v-btn>
       

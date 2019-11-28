@@ -31,6 +31,16 @@ export default new Vuex.Store({
       state.nurses = payload;
     },
     setPatients(state, payload) {
+      payload.forEach((element: any) => {
+        const name = element.emergency_contact_name || '';
+        const phone = element.emergency_contact_phone_number || '';
+        const relation = element.emergency_contact_relation || '';
+        element.emergency_contact = `${name} (${phone}) [${relation}]`;
+        if (element.emergency_contact === ' () []') {
+          element.emergency_contact = '';
+        }
+        element.date_of_birth = new Date(element.date_of_birth).toLocaleDateString('ru');
+      });
       state.patients = payload;
     },
     setReports(state, payload) {
@@ -59,16 +69,6 @@ export default new Vuex.Store({
     async getPatients({ commit }) {
       const response = await fetch(`${API}/patients/`);
       const json = await response.json();
-      json.forEach((element: any) => {
-        const name = element.emergency_contact_name || '';
-        const phone = element.emergency_contact_phone_number || '';
-        const relation = element.emergency_contact_relation || '';
-        element.emergency_contact = `${name} (${phone}) [${relation}]`;
-        if (element.emergency_contact === ' () []') {
-          element.emergency_contact = '';
-        }
-        element.date_of_birth = new Date(element.date_of_birth).toLocaleDateString('ru');
-      });
       commit('setPatients', json);
     },
     async getReports({ commit, state }) {
