@@ -116,6 +116,14 @@ export default new Vuex.Store({
       const json = await response.json();
       commit('setDoctors', json);
     },
+    async doctor_working_hours(context, payload) {
+      if (payload == null) {
+        throw new Error('Please pass a valid doctor id');
+      }
+      const response = await fetch(`${API}/doctors/working_hours?doctor_id=${payload}`);
+      const json = await response.json();
+      return json;
+    },
   },
   getters: {
     canSeeReports: (state) => state.currentUser != null && ['doctor', 'patient'].includes(state.userType),

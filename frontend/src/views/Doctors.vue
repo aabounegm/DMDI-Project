@@ -5,6 +5,9 @@
         :headers="headers"
         :items="$store.state.doctors"
         :search="search"
+        @item-expanded="getHours"
+        show-expand
+        single-expand
       >
         <template v-slot:top>
           <v-toolbar flat color="white">
@@ -30,6 +33,21 @@
             ></v-text-field>
           </v-toolbar>
         </template>
+        <template v-slot:expanded-item="props">
+          <td :colspan="headers.length">
+            <v-sheet height="400">
+              <v-calendar
+                :start="today"
+                :value="today"
+                :events="hours"
+                color="primary"
+                type="week"
+                interval-count="24"
+                interval-height="100"
+              ></v-calendar>
+            </v-sheet>
+          </td>
+        </template>
       </v-data-table>
     </v-card>
   </v-container>
@@ -49,12 +67,29 @@ export default Vue.extend({
         { text: 'Cost', value: 'cost' },
         { text: 'Room #', value: 'room' },
         { text: 'Speciality', value: 'speciality' },
+        { text: '', value: 'data-table-expand' },
       ],
+      hours: [] as any[],
+      today: '2019-09-01',
     };
   },
   created() {
     this.$store.dispatch('getDoctors');
   },
-  methods: mapActions(['query1', 'query5']),
+  methods: {
+    ...mapActions(['query1', 'query5']),
+    async getHours({item, value}: {item: any, value: boolean}) {
+      if (!value) {
+        return;
+      }
+      this.hours = [];
+      const hours: any[] = await this.$store.dispatch('doctor_working_hours', item.id);
+      this.hours = hours.map((slot: any) => ({
+        start: `2019-09-${1 + slot.day} ${slot.start_time}`,
+        end: `2019-09-${1 + slot.day} ${slot.end_time}`,
+        name: 'Shift',
+      }));
+    },
+  },
 });
 </script>
