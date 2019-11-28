@@ -44,6 +44,14 @@ export default new Vuex.Store({
       state.patients = payload;
     },
     setReports(state, payload) {
+      payload.forEach((element: any) => {
+        if (element.needs_follow_up) {
+          element.needs_follow_up = 'Yes';
+        } else {
+          element.needs_follow_up = 'No';
+        }
+        element.date = new Date(element.date).toLocaleString('ru');
+      });
       state.reports = payload;
     },
     setStatistics(state, payload) {
@@ -74,13 +82,6 @@ export default new Vuex.Store({
     async getReports({ commit, state }) {
       const response = await fetch(`${API}/reports/?${state.userType}_id=${state.currentUser.id}`);
       const json = await response.json();
-      json.forEach((element: any) => {
-        if (element.needs_follow_up) {
-          element.needs_follow_up = 'Yes';
-        } else {
-          element.needs_follow_up = 'No';
-        }
-      });
       commit('setReports', json);
     },
     async query1({ commit, state }) {
