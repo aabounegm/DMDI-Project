@@ -3,7 +3,7 @@
     <v-radio-group v-model="userType">
       <v-radio v-for="(value, type) in users" :key="type" :value="type">
         <template v-slot:label>
-          {{ type }}
+          {{ type | title }}
           <v-select style="margin-left: 50px;" :items="value" v-model="currentUser">
             <template v-slot:item="{ item }">
               {{ item | name }}
@@ -59,6 +59,9 @@ export default Vue.extend({
     },
     pretty(value: object) {
       return JSON.stringify(value, null, 4);
+    },
+    title(str: string) {
+      return str.split(' ').map((s) => s[0].toUpperCase() + s.slice(1)).join(' ');
     },
   },
 });
