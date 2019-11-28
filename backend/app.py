@@ -16,7 +16,7 @@ app.url_map.strict_slashes = False
 @app.route('/', defaults={'path': 'index.html'})
 @app.route('/<path:path>')
 def home(path):
-    if not (path.startswith('js/') or path.startswith('css/') or path == 'favicon.ico'):
+    if not (path.startswith('js/') or path.startswith('css/') or path == 'favicon.jpg'):
         path = 'index.html'
     return send_from_directory('./dist', path)
 
