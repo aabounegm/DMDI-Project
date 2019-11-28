@@ -7,7 +7,6 @@
     <v-col>
       <v-sheet height="560">
         <v-calendar
-          :now="today"
           :start="today"
           :value="today"
           :events="events"
