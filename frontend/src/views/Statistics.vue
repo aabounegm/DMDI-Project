@@ -1,9 +1,6 @@
 <template>
 <v-container>
   <v-row>
-    Select the doctor: 
-  </v-row>
-  <v-row>
     <v-col>
       <v-sheet height="560">
         <v-calendar

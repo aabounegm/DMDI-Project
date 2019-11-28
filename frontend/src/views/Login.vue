@@ -1,6 +1,5 @@
 <template>
   <v-container>
-    <pre>Current User: {{ currentUser | pretty }}</pre>
     <v-radio-group v-model="userType">
       <v-radio v-for="(value, type) in users" :key="type" :value="type">
         <template v-slot:label>
@@ -17,6 +16,7 @@
       </v-radio>
       <v-radio label="Guest" value="guest"></v-radio>
     </v-radio-group>
+    <pre>Current User: {{ currentUser | pretty }}</pre>
   </v-container>
 </template>
 
