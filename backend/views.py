@@ -16,6 +16,22 @@ def get_doctors():
     return jsonify(results)
 
 
+@api.route('/doctors/working_hours', endpoint='doctors_working_hours')
+def get_doctors_hours():
+    doctor_id = request.args.get('doctor_id', type=int)
+    if doctor_id is None:
+        abort(400, 'Please select a valid doctor')
+    cur = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+    cur.execute(
+        'SELECT * FROM doctor_working_hours WHERE doctor_id = %s', (doctor_id,))
+    results = cur.fetchall()
+    cur.close()
+    for row in results:
+        row['start_time'] = str(row['start_time'])
+        row['end_time'] = str(row['end_time'])
+    return jsonify(results)
+
+
 @api.route('/doctors/query1', endpoint='query1')
 def query1():
     patient_id = request.args.get('patient_id', type=int)
