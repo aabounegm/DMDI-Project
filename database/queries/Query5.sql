@@ -63,12 +63,12 @@ FROM
 					Patient_stability_hundred.years
 			) AS Patient_stability
 			WHERE
-				Patient_stability.patients_visited > 5
+				Patient_stability.patients_visited >= 5
 			GROUP BY
 				Patient_stability.doctor_id
 		) AS Patient_stability_2
 		WHERE
-			Patient_stability_2.years_stable = 10
+			Patient_stability_2.years_stable >= 10
 	) AS Patient_stability_checked
 WHERE
 	Doctors.id = Patient_stability_checked.doctor_id AND
