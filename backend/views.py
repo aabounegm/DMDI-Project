@@ -42,13 +42,7 @@ def query1():
                         ) AS Patient_last_visit
                     WHERE
                     (
-                        (first_name LIKE 'M%%' AND last_name NOT LIKE 'M%%')
-                        OR
-                        (first_name LIKE 'L%%' AND last_name NOT LIKE 'L%%')
-                        OR
-                        (first_name NOT LIKE 'M%%' AND last_name LIKE 'M%%')
-                        OR
-                        (first_name NOT LIKE 'L%%' AND last_name LIKE 'L%%')
+                        (first_name LIKE 'M%' OR first_name LIKE 'L%') != (last_name LIKE 'M%' OR last_name LIKE 'L%')
                     )
                     AND
                         Appointments.doctor_id = Doctors.id
@@ -259,9 +253,9 @@ def get_patients():
 def query3():
     cur = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
     cur.execute('''SELECT
-                Slots_3.patient_id,
-                Slots_3.full_name
+                Patients.*
             FROM
+            Patients,
             (
                 SELECT
                     Slots_2.patient_id,
@@ -302,6 +296,7 @@ def query3():
             )
             AS Slots_3
             WHERE
+                Patients.id = Slots_3.patient_id AND
                 Slots_3.week_count >= EXTRACT (WEEK FROM  NOW()) - EXTRACT
             (WEEK FROM  NOW() - INTERVAL'1 MONTH') + 1;
 ''')
