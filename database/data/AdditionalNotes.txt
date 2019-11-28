@@ -3,8 +3,8 @@ The patient feels better.
 The patient must not get up.
 The patient has been taken worse.
 The patient became a lot worse.
-It is prohibited for patient to go outside.
-It is prohibited for patient to take flights.
+It is prohibited for the patient to go outside.
+It is prohibited for the patient to take flights.
 The patient should avoid visiting public gathering places.
 Difficult case...
 Tough luck!
@@ -16,5 +16,5 @@ The patient needs the support of family and friends.
 The patient needs to spend more time outside.
 The patient needs to take more physical activity.
 The patient needs surgery.
-The patint needs to undergo the occupational therapy.
+The patient needs to undergo the occupational therapy.
 The patient needs expensive imported medicine.

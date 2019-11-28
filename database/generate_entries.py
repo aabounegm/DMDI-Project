@@ -26,21 +26,6 @@ def generateBool():
     return randint(0, 1) == 1
 
 
-def generateCost():
-    """Generate Cost of a Doctor per hour."""
-    return randint(1, 70) * 100
-
-
-def generateNSalary():
-    """Generate Nurse's monthly salary."""
-    return randint(100, 500) * 100
-
-
-def generateSSalary():
-    """Generate Staff's monthly salary."""
-    return randint(25, 5240) * 100
-
-
 LicenseIDs = set()
 
 
@@ -67,11 +52,11 @@ def generatePhnumber():
 
 def generateRoom():
     """Generate (non-unique) room in string surrounded by single quotes."""
-    room = randint(1, 5) * 100 + randint(1, 99)
-    t = randint(0, 10)
+    room = randint(1, 5) * 100 + randint(1, 78)
+    t = randint(1, 10)
     letter = ''
     # note that either 'A', 'B', 'C' or nothing can be added in the end of the three-digit number:
-    if t == 1 or t == 2:
+    if t <= 2:
         letter = 'A'
     elif t == 3:
         letter = 'B'
@@ -80,7 +65,7 @@ def generateRoom():
     return f"'{room:d}{letter}'"
 
 
-bloodTypes = ['A', 'B', 'AB', 'O']
+bloodTypes = ('A', 'B', 'AB', 'O')
 
 
 def generateBlood():
@@ -102,6 +87,14 @@ def generateNumSyndicate():
     return 'null'
 
 
+def generateICAmount():
+    """Generate Inventory_Change amount."""
+    t = randint(-10, 10)
+    while t == 0:
+        t = randint(-10, 10)
+    return t
+
+
 def generateDOB():
     """Generate Patient's date_of_birth in format 'yyyy.mm.dd' in string surrounded by single quotes."""
     month = randint(1, 12)
@@ -121,7 +114,7 @@ def generateMinute():
 def generateDateTime():
     """Generate date and time for Appointment in isoformat using datetime.isoformat()."""
     return datetime(
-        randint(2000, 2019), randint(1, 12), randint(1, 28), randint(7, 19),
+        randint(2010, 2019), randint(1, 12), randint(1, 28), randint(7, 19),
         int(generateMinute())).isoformat()
 
 
@@ -185,11 +178,11 @@ for i in range(numDoctors):  # generate INSERT statements for Doctors:
     fout.write(
         f"INSERT INTO Doctors (first_name, last_name, license_id, speciality, cost, room, phone_number) VALUES ("
         f"{choice(firstnames)}, {choice(lastnames)}, {generateLicenseID()}, {choice(specialists)}, "
-        f"{generateCost()}, {generateRoom()}, {generatePhnumber()});\n")
+        f"{randint(1, 70) * 100}, {generateRoom()}, {generatePhnumber()});\n")
 fout.write('\n')
 # generate Working hours for each Doctor...
 for doc in range(1, numDoctors + 1):
-    for day in range(1, 6):  # ...on each day:
+    for day in range(1, 7):  # ...on each day:
         if randint(0, 1):
             # Working hours before lunch-break:
             fout.write(
@@ -217,7 +210,7 @@ for i in range(numNurses):  # generate INSERT statements for Nurses:
     fout.write(
         f'INSERT INTO Nurses (first_name, last_name, license_id, phone_number, salary) VALUES ('
         f"{choice(firstnames)}, {choice(lastnames)}, {generateLicenseID()}, "
-        f"{generatePhnumber()}, {generateNSalary()});\n")
+        f"{generatePhnumber()}, {randint(100, 500) * 100});\n")
 fout.write('\n')
 # generate Working hours for each Nurse...
 
@@ -249,7 +242,7 @@ for i in range(numStaff):  # generate INSERT statements for Staff:
     fout.write(
         f"INSERT INTO Staff (first_name, last_name, job, phone_number, salary) VALUES ("
         f"{choice(firstnames)}, {choice(lastnames)}, {choice(jobs)}, "
-        f"{generatePhnumber()}, {generateSSalary()});\n")
+        f"{generatePhnumber()}, {randint(25, 5240) * 100});\n")
 fout.write('\n')
 # generate Working hours for each Staff...
 for staff in range(1, numStaff + 1):
@@ -297,57 +290,37 @@ if numPatients < 0:
     numPatients = 10000
 for i in range(numPatients):  # generate INSERT statements for Patients:
     fout.write(
-        f"INSERT INTO Patients (first_name, last_name, date_of_birth, blood_type, "
+        f"INSERT INTO Patients (first_name, last_name, date_of_birth, gender, blood_type, "
         f"phone_number, syndicate_id, emergency_contact_name, emergency_contact_relation, "
         f"emergency_contact_phone_number) VALUES ({choice(firstnames)}, {choice(lastnames)}, "
-        f"{generateDOB()}, {generateBlood()}, {generatePhnumber()}, {generateNumSyndicate()}, "
+        f"{generateDOB()}, '{'m' if randint(0, 1) else 'f'}', {generateBlood()}, {generatePhnumber()}, {generateNumSyndicate()}, "
         f"{generateECName()}, {choice(relations)}, {generatePhnumber()});\n")
 fout.write('\n')
 print(numPatients, 'Patients with Emergency contacts have been successfully created.\n')
 
-print('Enter number of Appointments you want in the database')
-print("(to use the default value of 20000 for the stress-test, just press 'Enter'): ", end='')
+numAppointments = 50000
+print('Enter number of Appointments and reports you want in the database')
+print(
+    f"(to use the default value of {numAppointments} for the stress-test, just press 'Enter'): ", end='')
 try:  # check the input:
     numAppointments = int(input())
 except Exception:
-    print('Using the default value of 20000...')
-    numAppointments = 20000
+    print(f'Using the default value of {numAppointments}...')
 if numAppointments < 0:
-    print('Using the default value of 20000...')
-    numAppointments = 20000
+    numAppointments = 50000
+    print(f'Using the default value of {numAppointments}...')
 for i in range(numAppointments):  # generate INSERT statements for Appointmens:
     fout.write(
         f"INSERT INTO Appointments (date, doctor_id, patient_id, ailment_description) VALUES ("
         f"'{generateDateTime()}', {randint(1, numDoctors)}, {randint(1, numPatients)}, '{loremIpsum}');\n")
 fout.write('\n')
-print(numAppointments,
-      'Appointments between Doctor and Patient have been successfully created.\n')
 
-print('Enter number of Reports you want in the database')
-print("(to use the default value of 17346 for the stress-test, just press 'Enter'): ", end='')
-try:  # check the input:
-    numReports = int(input())
-except Exception:
-    print('Using the default value of 17346...')
-    numReports = 17346
-if numReports < 0:
-    print('Using the default value of 17346...')
-    numReports = 17346
-if numReports > numAppointments:
-    numReports = numAppointments
-    print('Cannot have more reports than appointments. Restricting to', numReports)
-keys = set()
-for i in range(numReports):  # generate INSERT statements for Reports:
-    appoint_id = randint(1, numAppointments)
-    while appoint_id in keys:
-        appoint_id = randint(1, numAppointments)
-    keys.add(appoint_id)
-    fout.write(
-        f"INSERT INTO Reports (diagnosis, additional_notes, needs_follow_up, appointment_id) VALUES ("
-        f"{choice(diagnoses)}, {choice(AdditionalNotes)}, {generateBool()}, {appoint_id});\n")
+# generate INSERT statements for Reports:
+for i in range(numAppointments):
+    fout.write(f'INSERT INTO Reports (diagnosis, additional_notes, needs_follow_up, appointment_id) '
+               f"VALUES ({choice(diagnoses)}, {choice(AdditionalNotes)}, {generateBool()}, {i+1});\n")
 fout.write('\n')
-print(numReports,
-      'Reports belonging to Appointments have been successfully created.\n')
+print(numAppointments, 'Appointments with Reports have been successfully created.\n')
 
 print('Enter number of Notice Boards you want in the database')
 print("(to use the default value of 100 for the stress-test, just press 'Enter'): ", end='')
@@ -465,7 +438,126 @@ for i in range(numPS):  # generate INSERT statements for Patient_Subscription:
         f"INSERT INTO Patient_Subscription (patient_id, board_id) VALUES ("
         f"{pat_id}, {board_id});\n")
 fout.write('\n')
-print(numPS,
-      'entries in Patient_Subscription have been successfully created.\n')
+print(numPS, 'entries in Patient_Subscription have been successfully created.\n')
+
+print('Novelty feature: Enter number of Discounts you want in the database')
+print("(to use the default value of 200 for the stress-test, just press 'Enter'): ", end='')
+try:  # check the input:
+    numDiscounts = int(input())
+except Exception:
+    print('Using the default value of 200...')
+    numDiscounts = 200
+if numDiscounts < 0:
+    print('Using the default value of 200...')
+    numDiscounts = 200
+if numDiscounts > numDoctors * numSyndicates:
+    print('Number of Discounts cannot be bigger than')
+    print('(number of Doctors) * (number of Syndicates) =')
+    print(numDoctors, '*', numSyndicates, '=', numDoctors * numSyndicates)
+    print('Using the value of', numDoctors * numSyndicates, 'for Discounts...')
+    numDiscounts = numDoctors * numSyndicates
+keys = set()
+for i in range(numDiscounts):  # generate INSERT statements for Discounts:
+    SyndicateID = randint(1, numSyndicates)
+    DoctorID = randint(1, numDoctors)
+    while (SyndicateID, DoctorID) in keys:
+        SyndicateID = randint(1, numSyndicates)
+        DoctorID = randint(1, numDoctors)
+    keys.add((SyndicateID, DoctorID))
+    fout.write(f'INSERT INTO Discounts (syndicate_id, doctor_id, discount_amount) VALUES ('
+               f"{SyndicateID}, {DoctorID}, {randint(1, 20) * 50});\n")
+# notice that amount of discount can be bigger than the actual cost of a Doctor per hour
+fout.write('\n')
+print(numDiscounts, 'Discounts connecting Doctors and Syndicates have been successfully created.\n')
+
+print('Enter number of Medicines you want in the database')
+print("(to use the default value of 25 for the stress-test, just press 'Enter'): ", end='')
+try:  # check the input:
+    numMedicines = int(input())
+except Exception:
+    print('Using the default value of 25...')
+    numMedicines = 25
+if(numMedicines < 0):
+    print('Using the default value of 25...')
+    numMedicines = 25
+for i in range(numMedicines):  # generate INSERT statements for Medicines:
+    fout.write(f"INSERT INTO Medicines (name, active_ingredients) VALUES ("
+               f"'Medicine {i+1}', '{loremIpsum}');\n")
+fout.write('\n')
+print(numMedicines, 'Medicines have been successfully created.\n')
+
+print('Enter number of Inventory Changes you want in the database')
+print("(to use the default value of 100 for the stress-test, just press 'Enter'): ", end='')
+try:  # check the input:
+    numIC = int(input())
+except Exception:
+    print('Using the default value of 100...')
+    numIC = 100
+if numIC < 0:
+    print('Using the default value of 100...')
+    numIC = 100
+for i in range(numIC):  # generate INSERT statements for Inventory_Changes:
+    fout.write(f'INSERT INTO Inventory_Changes (medicine_id, amount, description, nurse_id) VALUES ('
+               f"{randint(1, numMedicines)}, {generateICAmount()}, '{loremIpsum}', {randint(1, numNurses)});\n")
+fout.write('\n')
+print(numIC, 'Inventory Changes connected to Medicines have been successfully created.\n')
+
+# Invoices are skipped intentionally due to high complexity of correct implementation
+# and uselessness for demonstration
+
+print('Enter number of Prescriptions you want in the database')
+print("(to use the default value of 500 for the stress-test, just press 'Enter'): ", end='')
+try:  # check the input:
+    numPrescriptions = int(input())
+except Exception:
+    print('Using the default value of 500...')
+    numPrescriptions = 500
+if numPrescriptions < 0:
+    print('Using the default value of 500...')
+    numPrescriptions = 500
+if numPrescriptions > numMedicines * numAppointments:
+    print('Number of Prescriptions cannot be bigger than')
+    print('(number of Medicines) * (number of Reports [Appointments]) =')
+    print(numMedicines, '*', numAppointments,
+          '=', numMedicines * numAppointments)
+    print('Using the value of', numMedicines *
+          numAppointments, 'for Prescriptions...')
+    numPrescriptions = numMedicines * numAppointments
+keys = set()
+# generate INSERT statements for Prescriptions:
+for i in range(numPrescriptions):
+    MedicineID = randint(1, numMedicines)
+    ReportID = randint(1, numAppointments)
+    while (MedicineID, ReportID) in keys:
+        MedicineID = randint(1, numMedicines)
+        ReportID = randint(1, numAppointments)
+    keys.add((MedicineID, ReportID))
+    fout.write(f'INSERT INTO Prescriptions (medicine_id, report_id) VALUES ('
+               f"{MedicineID}, {ReportID});\n")
+fout.write('\n')
+print(numPrescriptions,
+      'Prescriptions connecting Medicines and Reports have been successfully created.\n')
+
+# print the report:
+print('''\nScript finished. As the result, "Output.sql" file with INSERT instructions to fill in all tables''')
+print('in the database with sample data was created in the same directory with the program.')
+print('Your database now contains:')
+print('-', numDoctors, 'Doctors and their timetable;')
+print('-', numNurses, 'Nurses and their timetable;')
+print('-', numStaff, 'Staff members and their timetable;')
+print('-', numSyndicates, 'Medical Syndicates;')
+print('-', numPatients, 'Patients and their Emergency contacts;')
+print('-', numAppointments,
+      'Appointments between Doctors and Patients with Reports and their schedule;')
+print('-', numNoticeBoards, 'Notice Boards;')
+print('-', numNotices, 'Notices connected to Notice Boards;')
+print('-', numDS, 'Doctor Subscriptions;')
+print('-', numNS, 'Nurse Subscriptions;')
+print('-', numPS, 'Patient Subscriptions;')
+print('-', numDiscounts, 'Discounts connecting Doctors and Medical Syndicates;')
+print('-', numMedicines, 'Medicines;')
+print('-', numIC, 'Inventory Changes connected to Medicines;')
+print('-', numPrescriptions, 'Prescriptions connecting Medicines and Reports.')
+print('\nCheck it out!\n')
 
 fout.close()
