@@ -52,13 +52,14 @@ def query1():
                             WHERE
                                 Patients.id = %s AND Patients.id = Appointments.patient_id
                                 AND Appointments.date < NOW()
+                                AND Patients.gender = 'f'
                             ORDER BY
                                 date
                                 DESC LIMIT 1
                         ) AS Patient_last_visit
                     WHERE
                     (
-                        (first_name LIKE 'M%' OR first_name LIKE 'L%') != (last_name LIKE 'M%' OR last_name LIKE 'L%')
+                        (first_name LIKE 'M%%' OR first_name LIKE 'L%%') != (last_name LIKE 'M%%' OR last_name LIKE 'L%%')
                     )
                     AND
                         Appointments.doctor_id = Doctors.id
@@ -237,12 +238,12 @@ def query5():
                                         Patient_stability_hundred.years
                                 ) AS Patient_stability
                                 WHERE
-                                    Patient_stability.patients_visited > 5
+                                    Patient_stability.patients_visited >= 5
                                 GROUP BY
                                     Patient_stability.doctor_id
                             ) AS Patient_stability_2
                             WHERE
-                                Patient_stability_2.years_stable = 10
+                                Patient_stability_2.years_stable >= 10
                         ) AS Patient_stability_checked
                     WHERE
                         Doctors.id = Patient_stability_checked.doctor_id AND
@@ -336,7 +337,8 @@ def get_reports():
             report.diagnosis, report.additional_notes, report.needs_follow_up, appointment.date
         FROM Reports report, Patients patient, Doctors doctor, Appointments appointment
         WHERE appointment.{user_type}_id = %s AND appointment.patient_id=patient.id
-            AND doctor.id=appointment.doctor_id AND report.appointment_id=appointment.id;''',
+            AND doctor.id=appointment.doctor_id AND report.appointment_id=appointment.id
+        ORDER BY appointment.date DESC;''',
                 (patient_id if user_type == 'patient' else doctor_id,))
     results = cur.fetchall()
     cur.close()
