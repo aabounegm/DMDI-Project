@@ -1,4 +1,5 @@
 -- PostgreSQL 12.0
+
 CREATE TABLE Doctors
 (
   id SERIAL PRIMARY KEY,
@@ -71,6 +72,7 @@ CREATE TABLE Patients
   first_name VARCHAR(20) NOT NULL,
   last_name VARCHAR(20) NOT NULL,
   date_of_birth DATE NOT NULL,
+  gender CHAR(1) CHECK (gender = 'm' OR gender = 'f'),
   blood_type CHAR(3) NOT NULL CHECK(blood_type ~ E'^(A|B|AB|O)(\\+|-)'),
   phone_number CHAR(12) CHECK(phone_number ~ E'^\\+\\d+$'),
   syndicate_id INT REFERENCES Syndicates(id),
@@ -171,7 +173,7 @@ CREATE TABLE Invoices
   inventory_change_id INT REFERENCES Inventory_Changes(id)
 );
 
-CREATE TABLE Prescription
+CREATE TABLE Prescriptions
 (
   medicine_id INT NOT NULL REFERENCES Medicines(id),
   report_id INT NOT NULL REFERENCES Reports(appointment_id),
