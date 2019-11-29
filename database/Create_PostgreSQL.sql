@@ -139,7 +139,7 @@ CREATE TABLE Patient_Subscription
   board_id INT NOT NULL REFERENCES Notice_boards(id),
   PRIMARY KEY (patient_id, board_id)
 );
-------------------------------------------------------------------
+
 CREATE TABLE Discounts
 (
   syndicate_id INT NOT NULL REFERENCES Syndicates(id),
